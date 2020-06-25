@@ -1,0 +1,20 @@
+{
+  "presets": [
+    [
+      "@babel/env",
+      {
+        "corejs": "3",
+        "useBuiltIns": "entry",
+        "modules": false
+      }
+    ],
+    "@babel/typescript"
+  ],
+  "plugins": ["@babel/proposal-class-properties"],
+
+  "env": {
+    "test": {
+      "presets": ["@babel/env"]
+    }
+  }
+}
