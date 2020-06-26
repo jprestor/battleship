@@ -1,19 +1,19 @@
-const path = require('path');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+// const path = require("path");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
   .BundleAnalyzerPlugin;
 
 module.exports = (env = {}) => {
-  const { mode = 'development' } = env;
+  const { mode = "development" } = env;
 
-  const isProd = mode === 'production';
-  const isDev = mode === 'development';
+  const isProd = mode === "production";
+  const isDev = mode === "development";
 
-  const getStyleLoaders = () => { 
+  const getStyleLoaders = () => {
     return [
-      isProd ? MiniCssExtractPlugin.loader : 'style-loader',
+      isProd ? MiniCssExtractPlugin.loader : "style-loader",
       {
-        loader: 'css-loader',
+        loader: "css-loader",
         options: {
           sourceMap: true,
         },
@@ -26,9 +26,9 @@ module.exports = (env = {}) => {
 
     if (isProd) {
       plugins.push(
-        new BundleAnalyzerPlugin(),
+        // new BundleAnalyzerPlugin(),
         new MiniCssExtractPlugin({
-          filename: 'main-[hash:8].css',
+          filename: "main-[hash:8].css",
         })
       );
     }
@@ -37,31 +37,34 @@ module.exports = (env = {}) => {
   };
 
   return {
-    mode: isProd ? 'production' : isDev && 'development',
-    entry: './src/index.ts',
+    mode: isProd ? "production" : isDev && "development",
+
     output: {
-      filename: 'modal.js',
-      path: path.resolve(__dirname, 'dist'), // Нужен абсолютный путь
-      publicPath: isDev ? 'dist' : undefined,
-      library: 'New_lib', // Имя библиотеки в при экспорте. C большой буквы, тк класс
-      libraryTarget: 'window',
-      libraryExport: 'default',
+      filename: "lib.js",
+      publicPath: "dist",
+      library: "New_lib", // Имя библиотеки в при экспорте. C большой буквы, тк класс
+      libraryTarget: "window",
+      libraryExport: "default",
     },
-    resolve: { extensions: ['.ts ', '.js'] },
+    resolve: { extensions: [".js", ".ts"] },
 
     devServer: {
-      contentBase: './public/',
+      contentBase: "./public/",
       watchContentBase: true,
       open: true, // автоматически открывает браузер
     },
+
+    plugins: getPlugins(),
+
+    devtool: isDev ? "eval-cheap-source-map" : undefined,
 
     module: {
       rules: [
         // Loading JS
         {
-          test: /\.ts$/,
+          test: /\.(js|ts)$/,
           exclude: /node_modules/,
-          loader: 'babel-loader',
+          loader: "babel-loader",
         },
 
         // Loading SASS
@@ -70,7 +73,7 @@ module.exports = (env = {}) => {
           use: [
             ...getStyleLoaders(),
             {
-              loader: 'sass-loader',
+              loader: "sass-loader",
               options: {
                 // To enable CSS source maps, you'll need to pass the sourceMap option to the sass-loader and the css-loader
                 sourceMap: true,
@@ -86,9 +89,5 @@ module.exports = (env = {}) => {
         },
       ],
     },
-
-    plugins: getPlugins(),
-
-    devtool: isDev ? 'eval-cheap-source-map' : undefined,
   };
 };
