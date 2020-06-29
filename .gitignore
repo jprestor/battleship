@@ -1,9 +1,4 @@
 ﻿node_modules/
 build/
 dist/
-package-lock.json
-package-old.json
-yarn.lock
-.prettierrc.json
-snippets.json
 *.code-workspace
